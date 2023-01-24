@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"html/template"
 	"io"
 	"log"
@@ -18,13 +17,13 @@ type post struct {
 
 var form = `
 <h1>Post #{{.ID}}</h1>
-<div>{{printf "User %d" .UserID}}</div>
+<div>{{printf "The User %d" .UserID}}</div>
 <div>{{printf "Title is %s" .Title}}</div>
 <div>{{printf "Body is  %s" .Body}}</div>`
 
 func main() {
 	http.HandleFunc("/", handler)
-	log.Fatal(http.ListenAndServe(":8000", nil))
+	log.Fatal(http.ListenAndServe(":8080", nil))
 }
 
 func handler(w http.ResponseWriter, r *http.Request) {
@@ -56,8 +55,6 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusServiceUnavailable)
 		return
 	}
-
-	fmt.Println(item)
 
 	_template := template.New("sample")
 	_template.Parse(form)
