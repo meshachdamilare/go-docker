@@ -1,0 +1,34 @@
+version: '3'
+
+services:
+  api-docker:
+    build: . # search for dockerfile in the current directort
+    container_name: api_docker_compose
+    volumes:
+      - .:/go/src/go-docker
+    ports:
+      - "8001:8080"
+    networks:
+      - go_docker_project
+
+  mysql:
+    image: mysql:latest
+    restart: unless-stopped
+    tty: true
+    container_name: mysql-go-docker
+    ports:
+      - "3307:3306"
+    volumes:
+      - .:/var/lib
+      - ./mysql:/var/lib/mysql
+      - ./mysql-files:/var/lib/mysql-files
+    environment:
+      MYSQL_DATABASE: go-docker
+      MYSQL_PASSWORD: secret
+      MYSQL_ROOT_PASSWORD: secret
+    networks:
+      - go_docker_project
+
+networks:
+  go_docker_project:
+    external: true
